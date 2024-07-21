@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete User</title>
+</head>
+    <body>
+        <form th:method="POST" th:action="@{/admin/edit}" th:object="${user}">
+            <input type="hidden" th:field="*{id}">
+            <label for="username">Username:</label>
+            <input type="text" th:field="*{username}" id="username">
+            <br/>
+            <br/>
+
+            <label for="password">Password:</label>
+            <input type="text" th:field="*{password}" id="password">
+            <br/>
+            <br/>
+
+            <label for="email">Email:</label>
+            <input type="text" th:field="*{email}" id="email">
+            <br/>
+            <br/>
+
+            <label for="age">Age:</label>
+            <input type="text" th:field="*{age}" id="age">
+            <br/>
+            <br/>
+
+            <input type="submit" value="Edit">
+            <br/>
+            <br/>
+            <a href="/admin"><input type="button" value="Back"></a>
+        </form>
+    </body>
+</html>
+
