@@ -6,6 +6,26 @@
 <body>
     <h1>User, welcome spring boot security page!</h1>
 
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Email</th>
+            <th>Age</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.password}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.age}"></td>
+        </tr>
+        </tbody>
+    </table>
+
     <br/>
     <a th:href="@{/logout}"><input type="button" value="Logout"></a>
 </body>
