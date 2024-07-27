@@ -31,7 +31,7 @@ public class AdminController {
 		this.roleRepository = roleRepository;
 	}
 	// ------------------------------------
-
+	
 	// Отображение таблицы User'ов
 	@GetMapping("/admin")
 	public String showAllUsers(Model model) {
