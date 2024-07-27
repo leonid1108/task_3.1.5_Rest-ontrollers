@@ -1,19 +1,23 @@
 package ru.kata.spring.boot_security.demo.entities;
 
 import lombok.Data;
-import javax.persistence.*;
+import lombok.ToString;
 
-@Entity
+import javax.persistence.*;
+import java.util.List;
+
 @Data
-@Table(name = "user_roles")
+@Entity
+@Table(name = "roles")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
-
-    @Column(name = "role")
     private String name;
+
+    @ManyToMany(mappedBy = "roles")
+    @ToString.Exclude
+    private List<User> users;
 
     public Role() { }
 
@@ -21,4 +25,11 @@ public class Role {
         this.id = id;
         this.name = name;
     }
+
+    public String getRoleName() {
+        String[] roleName = name.split("_");
+        return roleName[1];
+    }
+
+
 }

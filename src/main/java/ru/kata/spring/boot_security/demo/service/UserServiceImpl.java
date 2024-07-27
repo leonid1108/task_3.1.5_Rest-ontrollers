@@ -6,9 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserRepository;
 import ru.kata.spring.boot_security.demo.entities.User;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,13 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void editUser(Long id, String username, String password, String email, int age, Set<String> roles) {
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setAge(age);
-        user.setRoles(roles);
+    public void editUser(Long id, User user) {
+        user.setId(id);
+        user.setPassword(user.getPassword());
         userRepository.save(user);
     }
 

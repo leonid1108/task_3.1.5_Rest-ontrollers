@@ -89,7 +89,7 @@
                                             <td scope="row" th:text="${user.password}"></td>
                                             <td scope="row" th:text="${user.email}"></td>
                                             <td scope="row" th:text="${user.age}"></td>
-                                            <td scope="row" th:text="${user.roles}"></td>
+                                            <td scope="row" th:text="${user.getRoleNames()}"></td>
                                             <td>
                                                 <button type="button" class="btn btn-info text-light" data-bs-toggle="modal" th:data-bs-target="'#userEditDialog' + ${user.id}" th:attr="data-userId=${user.id}">
                                                     Edit
@@ -130,8 +130,7 @@
                                                                     <div class="mb-3 d-flex flex-column align-items-center">
                                                                         <label for="roles_edit" class="form-label fw-bold">Roles</label>
                                                                         <select multiple id="roles_edit" name="roles" class="form-control">
-                                                                            <option value="ROLE_USER" th:selected="${user.roles.contains('ROLE_USER')}">USER</option>
-                                                                            <option value="ROLE_ADMIN" th:selected="${user.roles.contains('ROLE_ADMIN')}">ADMIN</option>
+                                                                            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.getRoleName()}" th:selected="${user.roles.contains(role)}"></option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -237,15 +236,13 @@
                                                 <div class="mb-3 d-flex flex-column align-items-center">
                                                     <label for="roles_create" class="form-label fw-bold">Roles</label>
                                                     <select class="form-control" id="roles_create" name="roles" multiple>
-                                                        <option value="ROLE_ADMIN">ADMIN</option>
-                                                        <option value="ROLE_USER">USER</option>
+                                                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.getRoleName()}"></option>
                                                     </select>
                                                 </div>
                                                 <div class="mb-3 d-flex justify-content-center">
                                                     <button type="submit" class="btn btn-success w-50 p-2">Add new user</button>
                                                 </div>
                                             </form>
-
                                         </div>
                                     </div>
                                 </div>
@@ -256,7 +253,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

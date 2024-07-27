@@ -20,7 +20,7 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream()
-                .map(role -> new GrantedAuthorityImpl(role))
+                .map(role -> new GrantedAuthorityImpl(role.getName()))
                 .collect(Collectors.toList());
     }
 
