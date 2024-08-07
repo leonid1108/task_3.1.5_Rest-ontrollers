@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserRepository;
 import ru.kata.spring.boot_security.demo.entities.User;
+import ru.kata.spring.boot_security.demo.util.UserIncorrectDataException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,7 +23,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User findById(Long id) {
-        return userRepository.getById(id);
+        Optional<User> user = userRepository.findById(id);
+        return user.orElseThrow(UserIncorrectDataException::new);
     }
 
     @Override
@@ -32,8 +35,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
     @Override
@@ -44,10 +47,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void editUser(Long id, User user) {
-        user.setId(id);
+    public User editUser(User user) {
+        user.setId(user.getId());
         user.setPassword(user.getPassword());
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
 }

@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -17,6 +19,7 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     @ToString.Exclude
+    @JsonIgnore
     private List<User> users;
 
     public Role() { }
@@ -30,6 +33,4 @@ public class Role {
         String[] roleName = name.split("_");
         return roleName[1];
     }
-
-
 }
