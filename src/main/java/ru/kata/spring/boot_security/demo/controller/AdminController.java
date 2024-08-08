@@ -30,17 +30,17 @@ public class AdminController {
     // Отображение таблицы User'ов
     @GetMapping("/admin")
     public String showAllUsers(Model model) {
-		// Получение авторизованного пользователя
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-		User user = userDetailService.findByUsername(username);
-		// --------------------------------------
-		boolean isAdmin = auth.getAuthorities().stream()
-				.anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
-		model.addAttribute("isAdmin", isAdmin);
-		model.addAttribute("thisUser", user);
-		model.addAttribute("users", userService.getAllUsers());
-		model.addAttribute("roles", roleRepository.findAll());
-		return "admin";
+	// Получение авторизованного пользователя
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	String username = auth.getName();
+	User user = userDetailService.findByUsername(username);
+	// --------------------------------------
+	boolean isAdmin = auth.getAuthorities().stream()
+			.anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+	model.addAttribute("isAdmin", isAdmin);
+	model.addAttribute("thisUser", user);
+	model.addAttribute("users", userService.getAllUsers());
+	model.addAttribute("roles", roleRepository.findAll());
+	return "admin";
     }
 }
