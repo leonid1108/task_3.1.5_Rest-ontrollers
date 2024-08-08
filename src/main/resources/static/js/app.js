@@ -275,6 +275,8 @@ $(async function addNewUser () {
                 addUserForm.find('#age_create').val('');
                 addUserForm.find('#roles_create').val([]);
 
+                let tab = new bootstrap.Tab(document.getElementById('home-tab'));
+                tab.show();
             } else {
                 console.error("Response Error", error);
             }
