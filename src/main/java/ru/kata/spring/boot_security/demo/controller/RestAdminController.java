@@ -12,16 +12,12 @@ import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class RestAdminController {
 
-    private final Logger log = Logger.getLogger(RestAdminController.class.getName());
-
-    // --------Dependency Injection--------
     private final UserService userService;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
@@ -33,7 +29,6 @@ public class RestAdminController {
 		this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
     }
-    // ------------------------------------
 
 	@GetMapping("/users")
 	public List<UserDTO> showAllUsers() {
@@ -42,43 +37,43 @@ public class RestAdminController {
                 .collect(Collectors.toList());
 	}
 
+    @GetMapping("/roles")
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
+
     @GetMapping("/users/{id}")
     public UserDTO showUser(@PathVariable Long id) {
         return convertToUserDTO(userService.findById(id));
     }
 
+    // Создание нового пользователя
     @PostMapping(value = "/users", consumes = "application/json", produces = "application/json")
     public ResponseEntity<User> createNewUser(@RequestBody UserDTO userDTO) {
-        log.info(userDTO.toString());
         User user = convertToUser(userDTO);
-        log.info(user.toString());
         List<Role> roles = user.getRoles().stream()
                 .map(role -> roleRepository.findById(role.getId())
                         .orElseThrow(() -> new RuntimeException("Role not found")))
                 .collect(Collectors.toList());
-        log.info(roles.toString());
         user.setRoles(roles);
         User savedUser = userService.saveUser(user);
 
         return ResponseEntity.ok(savedUser);
     }
 
-    @PutMapping("/users")
-    public ResponseEntity<User> editUser(@RequestBody UserDTO userDTO) {
-        User user = convertToUser(userDTO);
-        log.info(user.toString());
-        log.info(userDTO.toString());
-        User existingUser = userService.findById(user.getId());
+    // Редактирование пользователя
+    @PutMapping("/users/{id}")
+    public ResponseEntity<User> editUser(@PathVariable Long id, @RequestBody User user) {
+        User existingUser = userService.findById(id);
         if (existingUser == null) {
             return ResponseEntity.notFound().build();
         }
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setAge(user.getAge());
 
-        existingUser.setUsername(userDTO.getUsername());
-        existingUser.setPassword(userDTO.getPassword());
-        existingUser.setEmail(userDTO.getEmail());
-        existingUser.setAge(userDTO.getAge());
-
-        List<Role> roles = userDTO.getRoles().stream()
+        List<Role> roles = user.getRoles().stream()
                 .map(roleDTO -> roleRepository.findById(roleDTO.getId())
                         .orElseThrow(() -> new RuntimeException("Role not found")))
                 .collect(Collectors.toList());
@@ -87,7 +82,6 @@ public class RestAdminController {
         User updatedUser = userService.editUser(existingUser);
         return ResponseEntity.ok(updatedUser);
     }
-
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
@@ -99,7 +93,6 @@ public class RestAdminController {
         }
     }
 
-
     private UserDTO convertToUserDTO(User user) {
         return modelMapper.map(user, UserDTO.class);
     }
@@ -107,48 +100,4 @@ public class RestAdminController {
     private User convertToUser(UserDTO userDTO) {
         return modelMapper.map(userDTO, User.class);
     }
-
-//        User(id=null, username=admin2, password=admin2, email=inostran@gmail.com, age=27)
-//        user.setRoles(roles);
-
-//    // Отображение таблицы User'ов
-//    @GetMapping("/admin")
-//    public String showAllUsers(Model model) {
-//		// Получение авторизованного пользователя
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		String username = auth.getName();
-//		User user = userDetailService.findByUsername(username);
-//		// --------------------------------------
-//		boolean isAdmin = auth.getAuthorities().stream()
-//				.anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
-//		model.addAttribute("isAdmin", isAdmin);
-//		model.addAttribute("thisUser", user);
-//		model.addAttribute("users", userService.getAllUsers());
-//		model.addAttribute("roles", roleRepository.findAll());
-//		return "admin";
-//    }
-//
-//    @PostMapping("/admin")
-//    public String handleAdminActions(@RequestParam String action, @ModelAttribute User user, @RequestParam(required = false, defaultValue = "") List<Long> roles) {
-//		if ("create".equals(action)) {
-//			List<Role> roleObjects = roles.stream()
-//				.map(roleRepository::findById)
-//				.map(optionalRole -> optionalRole.orElse(null))
-//				.collect(Collectors.toList());
-//			user.setRoles(roleObjects);
-//			userService.saveUser(user);
-//		} else if ("edit".equals(action)) {
-//			if (user != null && user.getId() != null) {
-//			List<Role> roleObjects = roles.stream()
-//							.map(roleRepository::findById)
-//				.map(optionalRole -> optionalRole.orElse(null))
-//				.collect(Collectors.toList());
-//			user.setRoles(roleObjects);
-//			userService.editUser(user.getId(), user);
-//			}
-//		} else if ("delete".equals(action)) {
-//			userService.deleteById(user.getId());
-//		}
-//		return "redirect:/admin";
-//    }
 }

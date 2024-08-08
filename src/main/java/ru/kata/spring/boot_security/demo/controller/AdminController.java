@@ -43,28 +43,4 @@ public class AdminController {
 		model.addAttribute("roles", roleRepository.findAll());
 		return "admin";
     }
-
-//    @PostMapping("/admin")
-//    public String handleAdminActions(@RequestParam String action, @ModelAttribute User user, @RequestParam(required = false, defaultValue = "") List<Long> roles) {
-//		if ("create".equals(action)) {
-//			List<Role> roleObjects = roles.stream()
-//				.map(roleRepository::findById)
-//				.map(optionalRole -> optionalRole.orElse(null))
-//				.collect(Collectors.toList());
-//			user.setRoles(roleObjects);
-//			userService.saveUser(user);
-//		} else if ("edit".equals(action)) {
-//			if (user != null && user.getId() != null) {
-//			List<Role> roleObjects = roles.stream()
-//							.map(roleRepository::findById)
-//				.map(optionalRole -> optionalRole.orElse(null))
-//				.collect(Collectors.toList());
-//			user.setRoles(roleObjects);
-//			userService.editUser(user);
-//			}
-//		} else if ("delete".equals(action)) {
-//			userService.deleteById(user.getId());
-//		}
-//		return "redirect:/admin";
-//    }
 }
