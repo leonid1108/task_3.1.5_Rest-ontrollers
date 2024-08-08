@@ -25,17 +25,17 @@ public class RestAdminController {
 
     @Autowired
     public RestAdminController(UserService userService, RoleRepository roleRepository, ModelMapper modelMapper) {
-		this.userService = userService;
-		this.roleRepository = roleRepository;
+	this.userService = userService;
+	this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
     }
 
-	@GetMapping("/users")
-	public List<UserDTO> showAllUsers() {
-		return userService.getAllUsers().stream()
-                .map(this::convertToUserDTO)
-                .collect(Collectors.toList());
-	}
+    @GetMapping("/users")
+    public List<UserDTO> showAllUsers() {
+	return userService.getAllUsers().stream()
+            .map(this::convertToUserDTO)
+            .collect(Collectors.toList());
+    }
 
     @GetMapping("/roles")
     public List<Role> getAllRoles() {
